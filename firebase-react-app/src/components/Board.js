@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { collection, addDoc, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import db from "../firebase";
-import List from "./List"
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import List from "./List";
+import CardForm from "./CardForm"
+import { list } from "postcss";
 
 
 
@@ -9,7 +12,7 @@ function Board() {
     
 const [newProjectInput, setNewProjectInput] = useState({});
 const [projectList, setProjectList] = useState([]);
-
+const [lists, setLists] = useState(lists)
 useEffect(() => {
     onSnapshot(collection(db, "project"), (snapshot) => {
         snapshot.docChanges().forEach((docChange) => {
@@ -56,11 +59,27 @@ const handleDeleteProject = async (id) => {
 }
 return (
     <div>
-        <List
+        <CardForm
         onSubmit={handleSubmit}
         onChange={handleOnChange}
         projectList={newProject}
         />
+        <DragDropContext>
+            <Droppable droppableId="app" type="list" direction="horizontal">
+                {(provided) => {
+                    <div ref={provided.innerRef}>
+                        {list.map((list, index) => {
+                            return <List list={list} key={list.id} index={index}/>
+                        })}
+                        {provided.placeholder}
+                        <div>
+                            <CardForm type="list"/>
+                        </div>
+                    </div>
+                }}
+            </Droppable>
+        </DragDropContext>
+        
     </div>
 )
 }

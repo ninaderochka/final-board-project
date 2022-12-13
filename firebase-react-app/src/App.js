@@ -1,30 +1,24 @@
 import React from "react";
-import {Routes,Route,Link} from "react-router-dom";
-import List from "./Components/List"
+import { Routes, Route, Link } from "react-router-dom";
+import List from "./Components/List";
 import "./styles/App.css";
-import { connect } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
+import { addList } from "./Redux/reducer";
 
-function App(props){
-
-
-const { lists } = props
-const listsArray = lists.map((list) => {
-  return  <List key={list.id} title={list.title}  cards={list.cards} />
-})
-console.log(lists)
-return ( <div>
-    <div  className="w-72 m-5 p-2 rounded bg-slate-100">
-    {/* <List title={lists.title} />
-    <Card task={lists.cards}/> */}
-    {lists && listsArray}
+function App(props) {
+  const lists = useSelector((state) => state.lists);
+  const dispatch = useDispatch();
+  const listsArray = lists.map((list) => {
+    return <List key={list.id} {...list} />;
+  });
+  console.log(lists);
+  return (
+    <div>
+      <div className="w-72 m-5 p-2 rounded bg-slate-100">
+        {lists && listsArray}
+      </div>
     </div>
-</div>
-   );
-
+  );
 }
 
-const mapStateToProps = state => ({
-    lists: state.lists })
-
-
-export default connect(mapStateToProps)(App);
+export default App;
