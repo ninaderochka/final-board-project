@@ -1,40 +1,24 @@
 import React from "react";
-import {Routes,Route,Link} from "react-router-dom";
-import Home from "./Home"
-import InProject from "./InProject"
+import { Routes, Route, Link } from "react-router-dom";
+import List from "./Components/List";
+import "./styles/App.css";
+import { useSelector, useDispatch } from "react-redux";
+import { addList } from "./Redux/reducer";
 
-function App(){
-
-return ( <div>
-<Routes>
-<Route path="/home" element={<Home />}/>
-<Route path="/Inproject" element={<InProject />}/>
-</Routes>
-</div>
-)}
-
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
+function App(props) {
+  const lists = useSelector((state) => state.lists);
+  const dispatch = useDispatch();
+  const listsArray = lists.map((list) => {
+    return <List key={list.id} {...list} />;
+  });
+  console.log(lists);
+  return (
+    <div>
+      <div className="w-72 m-5 p-2 rounded bg-slate-100">
+        {lists && listsArray}
+      </div>
+    </div>
+  );
+}
 
 export default App;
